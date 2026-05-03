@@ -1,100 +1,89 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { useEffect, useState } from "react";
+import { Menu, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+
+const navItems = [
+  { name: "Inicio", href: "#inicio" },
+  { name: "Enfoque", href: "#historia" },
+  { name: "Soluciones", href: "#soluciones" },
+  { name: "Clientes", href: "#clientes" },
+  { name: "Contacto", href: "#contacto" },
+];
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
   return (
-    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-[#0d1f2d] shadow-md py-3 border-b border-[#1d2d3a]' : 'bg-transparent py-5 border-transparent'}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav
+      aria-label="Navegación principal"
+      className={`fixed top-0 z-50 w-full border-b transition-all duration-300 ${
+        isScrolled
+          ? "border-slate-800 bg-ocean-deep/92 py-3 shadow-lg backdrop-blur"
+          : "border-transparent bg-ocean-deep/20 py-4 backdrop-blur-sm"
+      }`}
+    >
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
-          
-          {/* Logo */}
-          <div className="flex items-center gap-3">
-             <div className="relative w-56 h-16">
-               <img 
-                 src="/marcodex_logo.png" 
-                 alt="MarCodex Logo" 
-                 className="object-contain w-full h-full"
-               />
-             </div>
-          </div>
+          <a href="#inicio" className="flex items-center" aria-label="Ir al inicio de MarCodex">
+            <img src="/marcodex_logo.png" alt="MarCodex" className="h-12 w-auto sm:h-14" />
+          </a>
 
-          {/* Desktop Menu */}
-          <div className="hidden md:flex flex-1 justify-end items-center gap-8">
-            <div className="flex gap-8">
-              {[
-                { name: 'Inicio', href: '#inicio' },
-                { name: 'Nuestra Historia', href: '#historia' },
-                { name: 'Tecnología', href: '#tecnologia' },
-                { name: 'Contacto', href: '#contacto' }
-              ].map((item) => (
-                <a 
-                  key={item.name} 
-                  href={item.href}
-                  className={`text-base font-medium transition-colors ${item.name === 'Nuestra Historia' ? 'text-white font-bold border-b-2 border-primary pb-1' : 'text-gray-300 hover:text-white'}`}
-                >
+          <div className="hidden items-center gap-7 md:flex">
+            <div className="flex items-center gap-6">
+              {navItems.map((item) => (
+                <a key={item.name} href={item.href} className="text-sm font-medium text-slate-300 transition-colors hover:text-white">
                   {item.name}
                 </a>
               ))}
             </div>
-            <Button className="shadow-lg shadow-primary/20 text-sm font-bold">
-              Solicitar Demo
+            <Button asChild className="h-auto rounded-md px-4 py-2.5 text-sm font-semibold">
+              <a href="#contacto">Conversar</a>
             </Button>
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden">
-            <Button 
-              variant="ghost"
-              size="icon"
-              onClick={toggleMobileMenu}
-              className="text-white hover:bg-white/10"
-            >
-              {isMobileMenuOpen ? <X className="w-8 h-8" /> : <Menu className="w-8 h-8" />}
-            </Button>
-          </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsMobileMenuOpen((open) => !open)}
+            className="text-white hover:bg-white/10 md:hidden"
+            aria-label={isMobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
+            aria-expanded={isMobileMenuOpen}
+          >
+            {isMobileMenuOpen ? <X className="h-7 w-7" /> : <Menu className="h-7 w-7" />}
+          </Button>
         </div>
       </div>
 
-      {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-[#0d1f2d] border-t border-[#1d2d3a] shadow-xl p-4 flex flex-col gap-4">
-           {[
-            { name: 'Inicio', href: '#inicio' },
-            { name: 'Nuestra Historia', href: '#historia' },
-            { name: 'Tecnología', href: '#tecnologia' },
-            { name: 'Contacto', href: '#contacto' }
-          ].map((item) => (
-             <a 
-               key={item.name} 
-               href={item.href}
-               onClick={() => setIsMobileMenuOpen(false)}
-               className="text-gray-300 hover:text-white hover:bg-white/5 px-4 py-3 rounded-lg text-lg font-medium transition-colors"
-             >
-               {item.name}
-             </a>
-          ))}
-          <Button className="w-full font-bold">
-            Solicitar Demo
-          </Button>
+        <div className="absolute left-0 right-0 top-full border-t border-slate-800 bg-ocean-deep p-4 shadow-xl md:hidden">
+          <div className="flex flex-col gap-1">
+            {navItems.map((item) => (
+              <a
+                key={item.name}
+                href={item.href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="rounded-md px-4 py-3 text-base font-medium text-slate-300 transition-colors hover:bg-white/5 hover:text-white"
+              >
+                {item.name}
+              </a>
+            ))}
+            <Button asChild className="mt-3 w-full rounded-md font-semibold">
+              <a href="#contacto" onClick={() => setIsMobileMenuOpen(false)}>
+                Conversar
+              </a>
+            </Button>
+          </div>
         </div>
       )}
     </nav>

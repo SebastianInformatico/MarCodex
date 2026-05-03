@@ -1,91 +1,91 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useEffect, useState } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const slides = [
   {
     image: "/service_dev.png",
-    title: "Desarrollo de Software a Medida",
-    description: "Creamos aplicaciones y plataformas exclusivas para solucionar los desafíos únicos de tu centro de cultivo. Código robusto, pensado para escalar."
+    title: "Desarrollo de software a medida",
+    description:
+      "Aplicaciones web, paneles internos y módulos operativos construidos según los procesos de cada empresa.",
   },
   {
     image: "/service_data.png",
-    title: "Consultoría y Análisis de Datos",
-    description: "Transformamos tus planillas y registros históricos en modelos de proyección. Detecta patrones y toma decisiones basadas en datos reales.",
+    title: "Consultoría y análisis de datos",
+    description:
+      "Ordenamiento de planillas, registros históricos e información dispersa para convertirla en reportes útiles.",
   },
   {
     image: "/service_support.png",
-    title: "Soporte y Apps en Terreno",
-    description: "Llevamos la tecnología al muelle. Aplicaciones móviles offline-first diseñadas para operarios, facilitando la captura de información donde sea."
-  }
+    title: "Soporte y aplicaciones en terreno",
+    description:
+      "Herramientas móviles y flujos simples para capturar información desde faena, puerto u oficina.",
+  },
 ];
 
 export default function ServiceCarousel() {
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
-    const timer = setInterval(() => {
+    const timer = window.setInterval(() => {
       setCurrent((prev) => (prev + 1) % slides.length);
-    }, 5000);
-    return () => clearInterval(timer);
+    }, 7000);
+    return () => window.clearInterval(timer);
   }, []);
 
   const nextSlide = () => setCurrent((prev) => (prev + 1) % slides.length);
   const prevSlide = () => setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
 
   return (
-    <div className="relative w-full h-[600px] overflow-hidden rounded-3xl shadow-2xl group">
+    <div className="relative h-[520px] w-full overflow-hidden rounded-lg border border-slate-700/80 bg-slate-900 shadow-xl sm:h-[560px]">
       {slides.map((slide, index) => (
-        <div 
-          key={index}
-          className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === current ? 'opacity-100' : 'opacity-0'}`}
+        <article
+          key={slide.title}
+          aria-hidden={index !== current}
+          className={`absolute inset-0 transition-opacity duration-700 ease-out ${index === current ? "opacity-100" : "opacity-0"}`}
         >
-          {/* Background Image */}
-          <div 
-            className="absolute inset-0 bg-cover bg-center transition-transform duration-[10000ms] ease-linear transform scale-105"
-            style={{ backgroundImage: `url('${slide.image}')` }}
-          ></div>
-          
-          {/* Gradient Overlay - Darkened for contrast */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#081218] via-[#081218]/90 to-transparent"></div>
+          <img src={slide.image} alt="" className="absolute inset-0 h-full w-full object-cover" loading={index === 0 ? "eager" : "lazy"} />
+          <div className="absolute inset-0 bg-gradient-to-t from-ocean-deep via-ocean-deep/82 to-ocean-deep/10" />
 
-          {/* Content */}
-          <div className="absolute bottom-0 left-0 p-8 md:p-16 max-w-3xl animate-fade-in-up">
-            <span className="inline-block py-1 px-3 rounded-full bg-primary/20 border border-primary/30 text-primary text-xs font-bold uppercase tracking-widest mb-4 backdrop-blur-sm shadow-sm">
-              Nuestros Servicios
+          <div className="absolute bottom-0 left-0 max-w-3xl p-6 sm:p-10 md:p-12">
+            <span className="mb-4 inline-block rounded-full border border-primary/25 bg-primary/12 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-blue-100">
+              Servicio
             </span>
-            <h3 className="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight text-shadow">
-              {slide.title}
-            </h3>
-            <p className="text-gray-200 text-lg md:text-xl font-light leading-relaxed max-w-2xl text-shadow">
-              {slide.description}
-            </p>
+            <h3 className="text-3xl font-bold leading-tight text-white md:text-4xl">{slide.title}</h3>
+            <p className="mt-4 max-w-2xl text-base leading-relaxed text-slate-200 sm:text-lg">{slide.description}</p>
           </div>
-        </div>
+        </article>
       ))}
 
-      {/* Controls */}
-      <button 
+      <button
+        type="button"
         onClick={prevSlide}
-        className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-black/30 text-white hover:bg-primary hover:text-white transition-all backdrop-blur-sm opacity-0 group-hover:opacity-100"
+        className="absolute left-4 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-md border border-white/15 bg-ocean-deep/75 text-white backdrop-blur transition-colors hover:bg-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+        aria-label="Ver servicio anterior"
       >
-        <ChevronLeft className="w-6 h-6" />
+        <ChevronLeft className="h-6 w-6" />
       </button>
-      <button 
+      <button
+        type="button"
         onClick={nextSlide}
-        className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-black/30 text-white hover:bg-primary hover:text-white transition-all backdrop-blur-sm opacity-0 group-hover:opacity-100"
+        className="absolute right-4 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-md border border-white/15 bg-ocean-deep/75 text-white backdrop-blur transition-colors hover:bg-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+        aria-label="Ver siguiente servicio"
       >
-        <ChevronRight className="w-6 h-6" />
+        <ChevronRight className="h-6 w-6" />
       </button>
 
-      {/* Dots */}
-      <div className="absolute bottom-8 right-8 flex gap-3">
-        {slides.map((_, index) => (
+      <div className="absolute bottom-5 right-5 flex gap-2" aria-label="Seleccionar servicio">
+        {slides.map((slide, index) => (
           <button
-            key={index}
+            key={slide.title}
+            type="button"
             onClick={() => setCurrent(index)}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${index === current ? 'bg-primary w-8' : 'bg-white/30 hover:bg-white/60'}`}
+            className={`h-2.5 rounded-full transition-all duration-300 ${
+              index === current ? "w-8 bg-primary" : "w-2.5 bg-white/45 hover:bg-white/70"
+            }`}
+            aria-label={`Ver ${slide.title}`}
+            aria-current={index === current}
           />
         ))}
       </div>
